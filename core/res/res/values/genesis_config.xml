@@ -33,6 +33,9 @@
     <!-- Whether to spoof GMS as Pixel Tablet -->
     <bool name="config_spoofasTablet">false</bool>
 
+    <!-- Whether to use Richtap vibration -->
+    <bool name="config_usesRichtapVibration">false</bool>
+
     <!-- Build properties from a GMS certified device against current platform SPL level -->
     <string-array name="config_certifiedBuildProperties" translatable="false">
       <!--
