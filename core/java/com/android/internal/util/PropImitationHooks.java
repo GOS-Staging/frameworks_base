@@ -36,6 +36,7 @@ import com.android.internal.R;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 
 public class PropImitationHooks {
 
@@ -62,6 +63,16 @@ public class PropImitationHooks {
         "BRAND", "google",
         "MODEL", "Pixel XL",
         "FINGERPRINT", "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys"
+    );
+
+    private static final Set<String> sPixelFeatures = Set.of(
+        "PIXEL_2017_PRELOAD",
+        "PIXEL_2018_PRELOAD",
+        "PIXEL_2019_MIDYEAR_PRELOAD",
+        "PIXEL_2019_PRELOAD",
+        "PIXEL_2020_EXPERIENCE",
+        "PIXEL_2020_MIDYEAR_EXPERIENCE",
+        "PIXEL_EXPERIENCE"
     );
 
     private static volatile String[] sCertifiedProps;
@@ -222,6 +233,14 @@ public class PropImitationHooks {
             dlog("Blocked key attestation sIsGms=" + sIsGms + " sIsFinsky=" + sIsFinsky);
             throw new UnsupportedOperationException();
         }
+    }
+
+    public static boolean hasSystemFeature(String name, boolean has) {
+        if (sIsPhotos && has && sPixelFeatures.stream().anyMatch(name::contains)) {
+            dlog("Blocked system feature " + name + " for Google Photos");
+            has = false;
+        }
+        return has;
     }
 
     public static void dlog(String msg) {
